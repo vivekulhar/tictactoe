@@ -10,4 +10,17 @@ public class Cell {
     private int row;
     private int col;
     private CellState cellState;
+
+    public Cell(int row, int col){
+        this.row = row;
+        this.col = col;
+        this.cellState = CellState.EMPTY;
+    }
+    public Cell(Player player, int row, int col){
+        this.player = player;
+        this.row = row;
+        this.col = col;
+        this.cellState = CellState.FILLED;
+    }
+
 }
