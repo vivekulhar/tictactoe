@@ -11,10 +11,11 @@ public class Board {
     private List<List<Cell>> board;
 
     public Board(int dimension){
+        this.board = new ArrayList<>();
         for(int i=0;i<dimension;i++){
-            this.board = new ArrayList<>();
+            this.board.add(new ArrayList<>());
             for(int j=0;j<dimension;j++){
-                board.get(i).add(new Cell());
+                this.board.get(i).add(new Cell(i,j));
             }
         }
     }
@@ -25,7 +26,7 @@ public class Board {
                 if(board.get(i).get(j).getCellState() == CellState.EMPTY)
                     System.out.print("| |");
                 else{
-System.out.print("|");
+                    System.out.print("|");
                     System.out.print(board.get(i).get(j).getPlayer().getSymbol());
                     System.out.print("|");
                 }
