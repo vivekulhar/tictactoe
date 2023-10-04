@@ -1,6 +1,8 @@
 package dev.vivek.models;
 
 import dev.vivek.exceptions.InvalidGameBuildException;
+import dev.vivek.strategies.gamewinningstrategy.GameWinningStrategy;
+import dev.vivek.strategies.gamewinningstrategy.OrderOneWinningStrategy;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +17,7 @@ public class Game {
     private GameStatus gameStatus;
     private int nextPlayerIndex;
     private Player winner;
+    private GameWinningStrategy gameWinningStrategy;
     public static Builder getBuilder(){
         return new Builder();
     }
@@ -53,6 +56,8 @@ public class Game {
                 game.setGameStatus(GameStatus.IN_PROGRESS);
                 game.setNextPlayerIndex(0);
                 game.setMoves(new ArrayList<>());
+
+                game.setGameWinningStrategy(new OrderOneWinningStrategy(dimension));
                 return game;
             }
             return null;
@@ -64,6 +69,37 @@ public class Game {
     }
     public void displayBoard(){
         this.board.display();
+    }
+
+    public void makeNextMove(){
+        // Which player turn is this
+        Player playerToMove = this.players.get(this.nextPlayerIndex);
+        System.out.println("It is "+playerToMove.getName()+"'s turn");
+        Move move = playerToMove.decideMove(this.board);
+
+        // validate the move decided by the player
+        int row = move.getCell().getRow();
+        int col = move.getCell().getCol();
+
+        System.out.println("Player "+playerToMove.getName()+" has decided to move to row "+row+" and col "+col);
+
+        // Assumption : Move is valid
+        board.getBoard().get(row).get(col).setCellState(CellState.FILLED);
+        board.getBoard().get(row).get(col).setPlayer(playerToMove);
+
+        // Add the move to the list of moves
+        this.moves.add(move);
+
+        // Check the winner
+        if(gameWinningStrategy.checkWinner(board, playerToMove,move.getCell())){
+            this.setGameStatus(GameStatus.ENDED);
+            this.winner = playerToMove;
+        }
+
+        // Check for DRAW
+
+        // Go to next player
+        nextPlayerIndex = (nextPlayerIndex+1)%players.size();
     }
 
 }

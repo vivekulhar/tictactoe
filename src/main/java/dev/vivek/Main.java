@@ -39,5 +39,25 @@ public class Main {
         GameController gameController = new GameController();
         Game game = gameController.createGame(dimension, players);
 
+        // Start the game
+        while(game.getGameStatus() == GameStatus.IN_PROGRESS){
+            System.out.println("This is the current board");
+            gameController.displayBoard(game);
+
+            System.out.println("Do you want to undo the last move? (Y/N)");
+            String undo = scanner.next();
+            if(undo.equalsIgnoreCase("Y")){
+                gameController.undo(game);
+
+            }else{
+
+                gameController.executeNextMove(game);
+            }
+        }
+        System.out.println("Game has ended");
+        if(game.getGameStatus() == GameStatus.ENDED){
+            System.out.println("The winner is "+gameController.getWinner(game).getName());
+        }
+
     }
 }

@@ -16,7 +16,7 @@ public class Cell {
         this.col = col;
         this.cellState = CellState.EMPTY;
     }
-    public Cell(Player player, int row, int col){
+    public Cell(Player player, int row, int col, CellState cellState){
         this.player = player;
         this.row = row;
         this.col = col;
